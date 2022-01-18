@@ -5,16 +5,26 @@ export const EmployeeList = () => {
     const [employees, changeEmployee] = useState([])
     const history = useHistory()
 
-    useEffect(
-        () => {
-            fetch("http://localhost:8088/employees?_expand=location")
+    const employeeFetch = () => {
+        fetch("http://localhost:8088/employees?_expand=location")
                 .then(res => res.json())
                 .then((data) => {
                     changeEmployee(data)
                 })
-        },
-        []
-    )
+    }
+
+    useEffect(
+        () => {employeeFetch()}, [])
+
+    const terminateEmployee = (id) => {
+        fetch(`http://localhost:8088/employees/${id}`, {
+            method: "DELETE"
+        })
+            .then(
+                employeeFetch()
+            )
+    }
+
     return (
         <>
             <div>
@@ -23,7 +33,11 @@ export const EmployeeList = () => {
             {
                 employees.map(
                     (employee) => {
-                        return <p key={`employee--${employee.id}`}>{employee.name} works in {employee.location.city}</p>
+                        return <p key={`employee--${employee.id}`}>{employee.name} works in {employee.location.city}
+                        <button onClick={() => {terminateEmployee(employee.id)}}>
+                        Fire Employee!!!  
+                        </button>
+                        </p>
                     }
                 )
             }
