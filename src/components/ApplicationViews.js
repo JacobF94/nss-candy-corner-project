@@ -18,7 +18,7 @@ export const ApplicationViews = () => {
                 <Products />
             </Route>
 
-            <Route path="/employee">
+            <Route exact path="/employee">
                 <EmployeeList />
             </Route>
 

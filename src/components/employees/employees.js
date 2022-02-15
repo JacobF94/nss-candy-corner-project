@@ -1,25 +1,23 @@
 import React, { useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
+import { fireEmployee, getAllEmployees } from "../ApiManager"
 
 export const EmployeeList = () => {
     const [employees, changeEmployee] = useState([])
     const history = useHistory()
 
     const employeeFetch = () => {
-        fetch("http://localhost:8088/employees?_expand=location")
-                .then(res => res.json())
+        getAllEmployees()
                 .then((data) => {
                     changeEmployee(data)
                 })
     }
 
     useEffect(
-        () => {employeeFetch()}, [])
+        () => employeeFetch(), [])
 
     const terminateEmployee = (id) => {
-        fetch(`http://localhost:8088/employees/${id}`, {
-            method: "DELETE"
-        })
+        fireEmployee()
             .then(
                 employeeFetch()
             )

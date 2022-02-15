@@ -1,33 +1,29 @@
 import React, { useState, useEffect } from "react";
+import { purchaseFetch } from "../ApiManager";
 
 export const MyOrders = () => {
-    const [fitleredProducts, setFitleredProducts] = useState([])
+    const [userOrders, setUserOrders] = useState([])
+    const [purchaseDetails, setPurchaseDetails] = useState([])
 
     useEffect(
         () => {
-            fetch("http://localhost:8088/customers?_embed=purchases")
-                .then(response => response.json())
+            purchaseFetch(parseInt(localStorage.getItem("candy_customer")))
                 .then((data) => {
-                    let tempArray = [];
-                    let finalArray = [];
-                    data.map((item) => {if(item.id === parseInt(localStorage.getItem("candy_customer"))) {
-                        tempArray.push(item)}
-                    });
-                    tempArray.map((m) => {m.purchases.forEach(p => {
-                        finalArray.push(p)
-                    });})
-                    setFitleredProducts(finalArray)})
-        },
-        []
+                    setUserOrders(data)
+        })
+    }, []
     )
+    // useEffect(() => {
+
+    // }, [userOrders])
 
     return (
         <>
         <h2>Your Past Orders</h2>
             {
-                fitleredProducts.map(
+                userOrders.map(
                     (item) => {
-                        return <p key={`item--${item.id}`}>{item.productId} total cost {item.totalPrice} at the store in {item.locationId}</p>
+                        return <p key={`item--${item.id}`}>{item.id}</p>
                     }
                 )
             }

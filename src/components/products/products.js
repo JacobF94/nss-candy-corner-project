@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { getAllProducts, productPurchasePost } from "../ApiManager";
 
 export const Products = () => {
     const [products, setProducts] = useState([])
 
     useEffect(
         () => {
-            fetch("http://localhost:8088/products?_expand=productType")
-                .then(res => res.json())
+            getAllProducts()
                 .then((data) => {
                     setProducts(data)
                 })
@@ -24,14 +24,8 @@ export const Products = () => {
             productId: specificItem.id,
             totalPrice: specificItem.price
         }
-        const fetchOptions = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(newPurchase)
-        }
-        return fetch("http://localhost:8088/purchases", fetchOptions)
+        
+        productPurchasePost(newPurchase)
         .then(() => {
             window.alert("thank you for your purchase!")
         })
